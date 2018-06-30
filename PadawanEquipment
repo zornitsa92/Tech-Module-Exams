@@ -1,0 +1,31 @@
+using System;
+
+namespace PadawanEquipment
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            double money = double.Parse(Console.ReadLine());
+            int students = int.Parse(Console.ReadLine());
+            double lightsabersPrice = double.Parse(Console.ReadLine());
+            double robesPrice = double.Parse(Console.ReadLine());
+            double beltsPrice = double.Parse(Console.ReadLine());
+
+            double lightsabers = lightsabersPrice * Math.Ceiling(students * 1.1);
+            double robes = robesPrice * students;
+            double belts = beltsPrice * (students - students / 6);
+
+            double sum = lightsabers + robes + belts;
+            if (sum <= money)
+            {
+                Console.WriteLine($"The money is enough - it would cost {sum:f2}lv.");
+            }
+            else
+            {
+                sum -= money;
+                Console.WriteLine($"Ivan Cho will need {sum:f2}lv more.");
+            }
+        }
+    }
+}
