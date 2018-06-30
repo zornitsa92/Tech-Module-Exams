@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Text;
+
+namespace _01._AnonymousDownsite
+{
+    
+
+    class AnonymousDownsite
+    {
+        static void Main(string[] args)
+        {
+            int n = int.Parse(Console.ReadLine());
+            int securityKey = int.Parse(Console.ReadLine());
+
+           
+            decimal sum = 0M;
+            for (int i = 0; i < n; i++)
+            {
+                string[] tokens = Console.ReadLine().Split();
+
+                Console.WriteLine(tokens[0]);
+                
+                long siteVisits = long.Parse(tokens[1]);
+                decimal siteCommercialPricePerVisit = decimal.Parse(tokens[2]);
+
+                decimal losses = siteVisits * siteCommercialPricePerVisit;
+
+              
+                sum += losses;
+
+            }
+
+            BigInteger securityToken = BigInteger.Pow(securityKey, n);
+
+           
+            Console.WriteLine($"Total Loss: {sum:f20}");
+            Console.WriteLine($"Security Token: {securityToken}");
+
+        }
+    }
+}
