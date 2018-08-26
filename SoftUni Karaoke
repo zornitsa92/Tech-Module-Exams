@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+ 
+namespace SoftUni Karaoke
+{
+    class SoftUni Karaoke
+    {
+        static void Main(string[] args)
+        {
+            string[] participants = Console.ReadLine().Split(new char[] {',', ' '}, StringSplitOptions.RemoveEmptyEntries);
+            string[] songs = Console.ReadLine().Split(new string[] {", "}, StringSplitOptions.RemoveEmptyEntries);
+ 
+            string[] playersOnStage = Console.ReadLine().Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+            SortedDictionary<string, List<string>> participantDictionary = new SortedDictionary<string, List<string>>();
+            while (playersOnStage[0] != "dawn")
+            {
+                string participantName = playersOnStage[0];
+                string currentSong = playersOnStage[1];
+                string award = playersOnStage[2];
+ 
+                if (participants.Contains(participantName)==false || songs.Contains(currentSong)==false)
+                {
+                    playersOnStage = Console.ReadLine().Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+                    continue;
+                }
+ 
+                if (participantDictionary.ContainsKey(participantName)==false)
+                {
+                    participantDictionary.Add(participantName,new List<string>());
+                }
+ 
+                if (participantDictionary[participantName].Contains(award) == false)
+                {
+                    participantDictionary[participantName].Add(award);
+                }
+               
+ 
+                playersOnStage = Console.ReadLine().Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+            }
+ 
+            if (participantDictionary.Count == 0)
+            {
+                Console.WriteLine($"No awards");
+                return;
+            }
+ 
+            foreach (var participant in participantDictionary.OrderByDescending(x=> x.Value.Count))
+            {
+                Console.WriteLine($"{participant.Key}: {participant.Value.Count} awards");
+                foreach (var award in participant.Value.OrderBy(x=>x))
+                {
+                    Console.WriteLine($"--{award}");
+                }
+            }
+ 
+        }
+    }
+}
