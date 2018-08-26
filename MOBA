@@ -1,0 +1,98 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+ 
+namespace MOBA
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+ 
+            Dictionary<string, Dictionary<string, int>> PlayersPosSkill = new Dictionary<string, Dictionary<string, int>>();
+            while (true)
+            {
+ 
+ 
+                string line = Console.ReadLine();
+                if (line == "Season end")
+                {
+                    break;
+                }
+ 
+                //Check if we add player and implement the logic
+                if (line.Contains("->"))
+                {
+                    string[] tokens = line.Split(" -> ").ToArray();
+                    string playerName = tokens[0];
+                    string position = tokens[1];
+                    int skill = int.Parse(tokens[2]);
+ 
+                        //Here we add the player if he isn't already in our dictionary
+                    if (PlayersPosSkill.ContainsKey(playerName) == false)
+                    {
+                        PlayersPosSkill.Add(playerName, new Dictionary<string, int>());
+                        PlayersPosSkill[playerName].Add(position, skill);
+                    }
+                    // If we have him   we add his position or update his skill
+                    else if (!PlayersPosSkill[playerName].ContainsKey(position))
+                    {
+                        PlayersPosSkill[playerName].Add(position, 0);
+                    }
+                    if (PlayersPosSkill[playerName][position] < skill)
+                    {
+                        PlayersPosSkill[playerName][position] = skill;
+                    }
+ 
+ 
+                }
+                // Now we implement the logic, when we need to duel players
+                else
+                {
+                    string[] tokens = line.Split(" vs ").ToArray();
+                    string player1 = tokens[0];
+                    string player2 = tokens[1];
+ 
+                    //we check if we have both players in our dictionary, if we don't we skip the command
+                    if (!PlayersPosSkill.ContainsKey(player1) || !PlayersPosSkill.ContainsKey(player2))
+                    {
+                        continue;
+                    }
+                    bool common = false;
+                    foreach (var item in PlayersPosSkill[player1])
+                    {
+                        if (PlayersPosSkill[player2].ContainsKey(item.Key))
+                        {
+                            common = true;
+                        }
+                    }
+                    int totalSkills1 = 0;
+                    int totalSkills2 = 0;
+                    if (common)
+                    {
+                        totalSkills1 = PlayersPosSkill[player1].Values.Sum();
+                        totalSkills2 = PlayersPosSkill[player2].Values.Sum();
+                    }
+                    if (totalSkills1 > totalSkills2)
+                    {
+                        PlayersPosSkill.Remove(player2);
+                    }
+                    else if (totalSkills2 > totalSkills1)
+                    {
+                        PlayersPosSkill.Remove(player1);
+                    }
+                }
+ 
+            }
+            // here we sort the dictionary as asked
+            foreach (var item in PlayersPosSkill.OrderByDescending(x => x.Value.Values.Sum()).ThenBy(c => c.Key))
+            {
+                Console.WriteLine($"{item.Key}: {item.Value.Values.Sum()} skill");
+                foreach (var position in item.Value.OrderByDescending(x => x.Value).ThenBy(c => c.Key))
+                {
+                    Console.WriteLine($"- {position.Key} <::> {position.Value}");
+                } 
+            } 
+        } 
+    }
+}
