@@ -1,0 +1,69 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+ 
+namespace SoftUni_Exam_Results
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var usernamesPoints = new Dictionary<string, int>();
+            var languages = new Dictionary<string, int>();
+ 
+            while (true)
+            {
+                string line = Console.ReadLine();
+ 
+                if (line == "exam finished") break;
+ 
+                string[] tokens = line.Split('-');
+ 
+                if (tokens.Length == 3)
+                {
+                    string username = tokens[0];
+                    string language = tokens[1];
+                    int points = int.Parse(tokens[2]);
+ 
+                    if (!usernamesPoints.ContainsKey(username))
+                    {
+                        usernamesPoints.Add(username, points);
+                    }
+                    else
+                    {
+                        if(usernamesPoints[username] <= points)
+                        {
+                            usernamesPoints[username] = points;
+                        }
+                    }
+ 
+                    if (!languages.ContainsKey(language))
+                    {
+                        languages.Add(language, 1);
+                    }
+                    else
+                    {
+                        languages[language]++;
+                    }
+                }
+                else
+                {
+                    string username = tokens[0];
+                    usernamesPoints.Remove(username);
+                }
+            }
+ 
+            Console.WriteLine("Results:");
+            foreach (var user in usernamesPoints.OrderByDescending(x => x.Value).ThenBy(x => x.Key))
+            {
+                Console.WriteLine($"{user.Key} | {user.Value}");
+            }
+ 
+            Console.WriteLine("Submissions:");
+            foreach (var lang in languages.OrderByDescending(x => x.Value).ThenBy(x => x.Key))
+            {
+                Console.WriteLine($"{lang.Key} - {lang.Value}");
+            }
+        }
+    }
+}
